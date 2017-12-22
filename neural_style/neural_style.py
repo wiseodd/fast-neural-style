@@ -55,6 +55,8 @@ def train(args):
     features_style = vgg(style_v)
     gram_style = [utils.gram_matrix(y) for y in features_style]
 
+    losses = []
+
     for e in range(args.epochs):
         transformer.train()
         agg_content_loss = 0.
@@ -105,6 +107,9 @@ def train(args):
                 )
                 print(mesg)
 
+                # Save losses
+                losses.append((agg_content_loss / (batch_id + 1), agg_style_loss / (batch_id + 1)))
+
             if count >= args.max_imgs:
                 break
 
@@ -117,6 +122,9 @@ def train(args):
     torch.save(transformer.state_dict(), save_model_path)
 
     print("\nDone, trained model saved at", save_model_path)
+
+    # Save losses
+    np.save(os.path.join(args.save_model_dir, 'losses.npy'), losses)
 
 
 def check_paths(args):
