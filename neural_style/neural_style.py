@@ -33,7 +33,7 @@ def train(args):
     train_dataset = datasets.ImageFolder(args.dataset, transform)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, **kwargs)
 
-    transformer = TransformerNet()
+    transformer = TransformerNet(args.instancenorm)
     optimizer = Adam(transformer.parameters(), args.lr)
     mse_loss = torch.nn.MSELoss()
 
@@ -133,7 +133,7 @@ def stylize(args):
     if args.cuda:
         content_image = content_image.cuda()
     content_image = Variable(utils.preprocess_batch(content_image), volatile=True)
-    style_model = TransformerNet()
+    style_model = TransformerNet(args.instancenorm)
     style_model.load_state_dict(torch.load(args.model))
 
     if args.cuda:
@@ -188,6 +188,8 @@ def main():
                                  help="saved model to be used for stylizing the image")
     eval_arg_parser.add_argument("--cuda", type=int, required=True,
                                  help="set it to 1 for running on GPU, 0 for CPU")
+    eval_arg_parser.add_argument("--instancenorm", default=False, action='store_true',
+                                 help="whether to use instancenorm instead of batchnorm. (default: False)")
 
     args = main_arg_parser.parse_args()
 
