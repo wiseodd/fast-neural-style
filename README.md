@@ -3,12 +3,6 @@ This repository contains a pytorch implementation of an algorithm for artistic s
 
 The model uses the method described in [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) along with [Instance Normalization](https://arxiv.org/pdf/1607.08022.pdf). The saved-models for examples shown in the README can be downloaded from [here](https://www.dropbox.com/s/gtwnyp9n49lqs7t/saved-models.zip?dl=0).
 
-<p align="center">
-    <img src="images/style-images/mosaic.jpg" height="200px">
-    <img src="images/content-images/amber.jpg" height="200px">
-    <img src="images/output-images/amber-mosaic.jpg" height="440px">
-</p>
-
 ## Requirements
 The program is written in Python, and uses [pytorch](http://pytorch.org/), [scipy](https://www.scipy.org). A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop, desktop using saved models.
 
@@ -42,19 +36,3 @@ Refer to ``neural_style/neural_style.py`` for other command line arguments.
 ## Models
 
 Models for the examples shown below can be downloaded from [here](https://www.dropbox.com/s/gtwnyp9n49lqs7t/saved-models.zip?dl=0) or by running the script ``download_styling_models.sh``.
-
-<div align='center'>
-  <img src='images/content-images/amber.jpg' height="174px">		
-</div>
-
-<div align='center'>
-  <img src='images/style-images/mosaic.jpg' height="174px">
-  <img src='images/output-images/amber-mosaic.jpg' height="174px">
-  <img src='images/output-images/amber-candy.jpg' height="174px">
-  <img src='images/style-images/candy.jpg' height="174px">
-  <br>
-  <img src='images/style-images/starry-night-cropped.jpg' height="174px">
-  <img src='images/output-images/amber-starry-night.jpg' height="174px">
-  <img src='images/output-images/amber-udnie.jpg' height="174px">
-  <img src='images/style-images/udnie.jpg' height="174px">
-</div>
