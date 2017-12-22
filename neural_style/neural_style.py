@@ -60,6 +60,7 @@ def train(args):
         agg_content_loss = 0.
         agg_style_loss = 0.
         count = 0
+
         for batch_id, (x, _) in enumerate(train_loader):
             n_batch = len(x)
             count += n_batch
@@ -103,6 +104,9 @@ def train(args):
                                   (agg_content_loss + agg_style_loss) / (batch_id + 1)
                 )
                 print(mesg)
+
+            if count >= args.max_imgs:
+                break
 
     # save model
     transformer.eval()
@@ -176,6 +180,10 @@ def main():
                                   help="learning rate, default is 0.001")
     train_arg_parser.add_argument("--log-interval", type=int, default=500,
                                   help="number of images after which the training loss is logged, default is 500")
+    train_arg_parser.add_argument("--max_imgs", type=int, default=10000,
+                                  help="number of images used per epoch. (default: 10000)")
+    train_arg_parser.add_argument("--instancenorm", default=False, action='store_true',
+                                 help="whether to use instancenorm instead of batchnorm. (default: False)")
 
     eval_arg_parser = subparsers.add_parser("eval", help="parser for evaluation/stylizing arguments")
     eval_arg_parser.add_argument("--content-image", type=str, required=True,
