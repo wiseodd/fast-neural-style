@@ -81,9 +81,11 @@ def train(args):
             features_y = vgg(y)
             features_xc = vgg(xc)
 
-            f_xc_c = Variable(features_xc[1].data, requires_grad=False)
+            closs_layer = args.contentloss_layer
 
-            content_loss = args.content_weight * mse_loss(features_y[1], f_xc_c)
+            f_xc_c = Variable(features_xc[closs_layer].data, requires_grad=False)
+
+            content_loss = args.content_weight * mse_loss(features_y[closs_layer], f_xc_c)
 
             style_loss = 0.
             for m in range(len(features_y)):
@@ -192,6 +194,8 @@ def main():
                                   help="number of images used per epoch. (default: 10000)")
     train_arg_parser.add_argument("--instancenorm", default=False, action='store_true',
                                  help="whether to use instancenorm instead of batchnorm. (default: False)")
+    train_arg_parser.add_argument("--contentloss_layer", type=int, default=1,
+                                 help="Which layer to be used for content loss. Options: (0: relu1_2; 1: relu_2_2; 3: relu3_3; 4: relu4_3). Default: 1")
 
     eval_arg_parser = subparsers.add_parser("eval", help="parser for evaluation/stylizing arguments")
     eval_arg_parser.add_argument("--content-image", type=str, required=True,
