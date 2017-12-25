@@ -55,6 +55,13 @@ def train(args):
     features_style = vgg(style_v)
     gram_style = [utils.gram_matrix(y) for y in features_style]
 
+    print()
+    print('Use InstanceNorm: {}'.format(args.instancenorm))
+    print('Loss layers: [0: relu1_2, 1: relu2_2, 2: relu3_3, 3: relu4_3]')
+    print('Content Loss layer: {}'.format(args.contentloss_layer))
+    print('Style Loss layers: {}'.format(args.styleloss_layers))
+    print()
+
     losses = []
 
     for e in range(args.epochs):
@@ -82,13 +89,13 @@ def train(args):
             features_xc = vgg(xc)
 
             closs_layer = args.contentloss_layer
-
             f_xc_c = Variable(features_xc[closs_layer].data, requires_grad=False)
 
             content_loss = args.content_weight * mse_loss(features_y[closs_layer], f_xc_c)
 
             style_loss = 0.
-            for m in range(len(features_y)):
+
+            for m in args.styleloss_layers:
                 gram_s = Variable(gram_style[m].data, requires_grad=False)
                 gram_y = utils.gram_matrix(features_y[m])
                 style_loss += args.style_weight * mse_loss(gram_y, gram_s[:n_batch, :, :])
@@ -196,6 +203,8 @@ def main():
                                  help="whether to use instancenorm instead of batchnorm. (default: False)")
     train_arg_parser.add_argument("--contentloss_layer", type=int, default=1,
                                  help="Which layer to be used for content loss. Options: (0: relu1_2; 1: relu_2_2; 3: relu3_3; 4: relu4_3). Default: 1")
+    train_arg_parser.add_argument('--styleloss_layers', nargs='+', type=int, default=[0, 1, 2, 3],
+                                  help="Which layers to be used for style loss. Options: (0: relu1_2; 1: relu_2_2; 3: relu3_3; 4: relu4_3). Default: 0 1 2 3")
 
     eval_arg_parser = subparsers.add_parser("eval", help="parser for evaluation/stylizing arguments")
     eval_arg_parser.add_argument("--content-image", type=str, required=True,
