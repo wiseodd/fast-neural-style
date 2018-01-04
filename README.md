@@ -1,10 +1,12 @@
-# fast-neural-style :city_sunrise: :rocket:
-This repository contains a pytorch implementation of an algorithm for artistic style transfer. The algorithm can be used to mix the content of an image with the style of another image. For example, here is a photograph of a door arch rendered in the style of a stained glass painting.
+# fast-neural-style 
+Based on Johnson, 2016's paper: [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) along with [Instance Normalization](https://arxiv.org/pdf/1607.08022.pdf)
 
-The model uses the method described in [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) along with [Instance Normalization](https://arxiv.org/pdf/1607.08022.pdf). The saved-models for examples shown in the README can be downloaded from [here](https://www.dropbox.com/s/gtwnyp9n49lqs7t/saved-models.zip?dl=0).
+Original implementation: <https://github.com/abhiskk/fast-neural-style>.
+Difference with the original implementation is that here, there are more options regarding training and evaluation, e.g. use BatchNorm, which layers to be used in the loss, etc.
 
 ## Requirements
-The program is written in Python, and uses [pytorch](http://pytorch.org/), [scipy](https://www.scipy.org). A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop, desktop using saved models.
+1. PyTorch
+2. MS COCO 2014 (if you want to train new style)
 
 ## Usage
 Stylize image
@@ -16,6 +18,7 @@ python neural_style/neural_style.py eval --content-image </path/to/content/image
 * `--output-image`: path for saving the output image.
 * `--content-scale`: factor for scaling down the content image if memory is an issue (eg: value of 2 will halve the height and width of content-image)
 * `--cuda`: set it to 1 for running on GPU, 0 for CPU.
+* `--instancenorm`: add this flag to use InstanceNorm, otherwise BatchNorm is used.
 
 Train model
 ```bash
@@ -28,11 +31,13 @@ There are several command line arguments, the important ones are listed below
 * `--vgg-model-dir`: path to folder where the vgg model will be downloaded.
 * `--save-model-dir`: path to folder where trained model will be saved.
 * `--cuda`: set it to 1 for running on GPU, 0 for CPU.
+* `--instancenorm`: add this flag to use InstanceNorm, otherwise BatchNorm is used.
+* `--max_imgs`: number of images used per epoch (useful for very large dataset and limited time).
+* `--contentloss_layer`: available options are {0: relu1_2; 1: relu_2_2; 3: relu3_3; 4: relu4_3}, default is 1.
+* `--styleloss_layers`: available options are {0: relu1_2; 1: relu_2_2; 3: relu3_3; 4: relu4_3}, default is `0 1 2 3`
 
 Refer to ``neural_style/neural_style.py`` for other command line arguments.
 
-**DISCLAIMER**: This implementation is also a part of the [pytorch examples](https://github.com/pytorch/examples/tree/master/fast_neural_style) repository. Implementation in this repository uses pretrained Caffe2 VGG whereas the pytorch examples repository implementation uses pretrained Pytorch VGG. The two VGGs have different preprocessings which results in different `--content-weight` and `--style-weight` parameters. The styled output images also look slightly different.
-
 ## Models
 
-Models for the examples shown below can be downloaded from [here](https://www.dropbox.com/s/gtwnyp9n49lqs7t/saved-models.zip?dl=0) or by running the script ``download_styling_models.sh``.
+Models for the examples shown below can be downloaded from [here](https://www.dropbox.com/s/gtwnyp9n49lqs7t/saved-models.zip?dl=0) or by running the script ``download_styling_models.sh`` (credit to original author <https://github.com/abhiskk/fast-neural-style>).
