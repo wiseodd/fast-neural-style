@@ -9,7 +9,7 @@ Difference with the original implementation is that here, there are more options
 2. MS COCO 2014 (if you want to train new style)
 
 ## Usage
-Stylize image
+### Stylize image
 ```
 python neural_style/neural_style.py eval --content-image </path/to/content/image> --model </path/to/saved/model> --output-image </path/to/output/image> --cuda 0
 ```
@@ -20,7 +20,7 @@ python neural_style/neural_style.py eval --content-image </path/to/content/image
 * `--cuda`: set it to 1 for running on GPU, 0 for CPU.
 * `--instancenorm`: add this flag to use InstanceNorm, otherwise BatchNorm is used.
 
-Train model
+### Train model
 ```bash
 python neural_style/neural_style.py train --dataset </path/to/train-dataset> --style-image </path/to/style/image> --vgg-model-dir </path/to/vgg/folder> --save-model-dir </path/to/save-model/folder> --epochs 2 --cuda 1
 ```
